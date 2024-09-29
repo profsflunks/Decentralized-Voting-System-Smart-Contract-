@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Voting {
+    struct Voter {
+        bool voted;
+        uint vote;
+    }
+    
+    mapping(address => Voter) public voters;
+    mapping(uint => uint) public candidates;
+    address public owner;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    function vote(uint candidateId) public {
+        require(!voters[msg.sender].voted, "Already voted.");
+        voters[msg.sender].voted = true;
+        voters[msg.sender].vote = candidateId;
+        candidates[candidateId]++;
+    }
+    
+    function getCandidateVotes(uint candidateId) public view returns (uint) {
+        return candidates[candidateId];
+    }
+}
